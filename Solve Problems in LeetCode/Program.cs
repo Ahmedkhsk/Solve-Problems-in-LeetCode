@@ -1,44 +1,24 @@
-﻿//Add Two Numbers with Linked List
-
-public class ListNode
-{
-    public int val;
-    public ListNode next;
-    public ListNode(int val = 0, ListNode next = null)
-    {
-        this.val = val;
-        this.next = next;
-    }
-}
-
+﻿//3. Longest Substring Without Repeating Characters
 public class Solution
 {
-    public static ListNode AddTwoNumbers(ListNode l1, ListNode l2)
+    public int LengthOfLongestSubstring(string s)
     {
-        ListNode dummyHead = new ListNode(0);
-        ListNode current = dummyHead;
-        int carry = 0;
+        HashSet<char> set = new HashSet<char>();
+        int left = 0;
+        int maxLength = 0;
 
-        while (l1 != null || l2 != null || carry != 0)
+        for (int right = 0; right < s.Length; right++)
         {
-            int sum = carry;
-            if(l1 != null)
+            while (set.Contains(s[right]))
             {
-                sum += l1.val;
-                l1 = l1.next;
+                set.Remove(s[left]);
+                left++;
             }
-            if (l2 != null)
-            {
-                sum += l2.val;
-                l2 = l2.next;
-            }
-
-            carry = sum / 10;
-            current.next = new ListNode(sum % 10);
-            current = current.next;
-
+            set.Add(s[right]);
+            maxLength = Math.Max(maxLength, right - left + 1);
         }
-        return dummyHead.next;
+
+        return maxLength;
     }
 }
 
@@ -46,16 +26,12 @@ public class Program
 {
     public static void Main(string[] args)
     {
-        ListNode l1 = new ListNode(2, new ListNode(4, new ListNode(3)));
-        ListNode l2 = new ListNode(5, new ListNode(6, new ListNode(4)));
-        ListNode result = Solution.AddTwoNumbers(l1, l2);
-
-        while (result != null)
-        {
-            Console.Write(result.val + " ");
-            result = result.next;
-        }
+        Solution solution = new Solution();
+        string input = "pwwkew";
+        int result = solution.LengthOfLongestSubstring(input);
+        Console.WriteLine($"The length of the longest substring without repeating characters in '{input}' is: {result}");
     }
 }
+
 
 
