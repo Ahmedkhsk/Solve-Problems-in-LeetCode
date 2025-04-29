@@ -1,24 +1,29 @@
-﻿//3. Longest Substring Without Repeating Characters
+﻿//Palindrome Number
+//https://leetcode.com/problems/palindrome-number/description/
 public class Solution
 {
-    public int LengthOfLongestSubstring(string s)
+    public bool IsPalindrome(int x)
     {
-        HashSet<char> set = new HashSet<char>();
-        int left = 0;
-        int maxLength = 0;
+        List<int> numbers = new List<int>();
 
-        for (int right = 0; right < s.Length; right++)
+        if (x < 0 || (x != 0 && x % 10 == 0))
+            return false;
+
+        while (x > 0)
         {
-            while (set.Contains(s[right]))
-            {
-                set.Remove(s[left]);
-                left++;
-            }
-            set.Add(s[right]);
-            maxLength = Math.Max(maxLength, right - left + 1);
+            numbers.Add(x % 10);
+            x /= 10;
         }
 
-        return maxLength;
+        for(int i = 0; i<numbers.Count / 2; i++)
+        {
+            if (numbers[i] != numbers[numbers.Count - 1 - i])
+            {
+                return false;
+            }
+        }
+
+        return true;
     }
 }
 
@@ -27,9 +32,7 @@ public class Program
     public static void Main(string[] args)
     {
         Solution solution = new Solution();
-        string input = "pwwkew";
-        int result = solution.LengthOfLongestSubstring(input);
-        Console.WriteLine($"The length of the longest substring without repeating characters in '{input}' is: {result}");
+              
     }
 }
 
