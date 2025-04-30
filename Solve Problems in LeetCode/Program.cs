@@ -1,30 +1,26 @@
-﻿//Palindrome Number
-//https://leetcode.com/problems/palindrome-number/description/
+﻿//Find Numbers with Even Number of Digits
+//https://leetcode.com/problems/find-numbers-with-even-number-of-digits/description/
 public class Solution
 {
-    public bool IsPalindrome(int x)
+    public int FindNumbers(int[] nums)
     {
-        List<int> numbers = new List<int>();
-
-        if (x < 0 || (x != 0 && x % 10 == 0))
-            return false;
-
-        while (x > 0)
+        int count = 0;
+        foreach(var num in nums)
         {
-            numbers.Add(x % 10);
-            x /= 10;
-        }
-
-        for(int i = 0; i<numbers.Count / 2; i++)
-        {
-            if (numbers[i] != numbers[numbers.Count - 1 - i])
+            int digitCount = 0, n = num;
+            while(n > 0)
             {
-                return false;
+                n /= 10;
+                digitCount++;
+            }
+            if (digitCount % 2 == 0)
+            {
+                count++;
             }
         }
-
-        return true;
+        return count;
     }
+
 }
 
 public class Program
