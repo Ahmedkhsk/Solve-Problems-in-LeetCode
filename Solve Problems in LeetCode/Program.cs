@@ -1,79 +1,66 @@
-﻿//Push Dominoes
-//https://leetcode.com/problems/push-dominoes/description
+﻿//Minimum Domino Rotations For Equal Row
+//https://leetcode.com/problems/minimum-domino-rotations-for-equal-row/description
+using System;
+using System.Linq;
+using System.Collections.Generic;
+
 public class Solution
 {
-    public string PushDominoes(string dominoes)
+    public int MinDominoRotations(int[] tops, int[] bottoms)
     {
-        int n = dominoes.Length;
-        int[] forces = new int[n];
-        int force = 0;
+        int length = tops.Length;
 
-        for (int i = 0; i < n; i++)
-        {
-            if (dominoes[i] == 'R')
-            {
-                force = n;
-            }
-            else if (dominoes[i] == 'L')
-            {
-                force = 0;
-            }
-            else
-            {
-                force = Math.Max(force - 1, 0);
-            }
-            forces[i] += force;
-        }
+        int mostFrequentTops = GetMostFrequent(tops);
+        int mostFrequentBottoms = GetMostFrequent(bottoms);
 
-        force = 0;
-        
-        for (int i = n-1 ; i >= 0; i--)
-        {
-            if (dominoes[i] == 'L')
-            {
-                force = n;
-            }
-            else if (dominoes[i] == 'R')
-            {
-                force = 0;
-            }
-            else
-            {
-                force = Math.Max(force - 1, 0);
-            }
-            forces[i] -= force;
-        }
+        int result = Math.Min(CountRotations(tops, bottoms, mostFrequentTops),
+                              CountRotations(tops, bottoms, mostFrequentBottoms));
 
-        char[] result = new char[n];
-
-        for (int i = 0; i < n ; i++)
-        {
-            if (forces[i] > 0)
-                result[i] = 'R';
-            else if(forces[i] < 0)
-                result[i] = 'L';
-            else
-                result[i] = '.';
-        }
-
-        return new string(result);
+        return result == int.MaxValue ? -1 : result;
     }
 
-}
+    private int GetMostFrequent(int[] arr)
+    {
+        var dict = new Dictionary<int, int>();
+        foreach (var num in arr)
+        {
+            if (dict.ContainsKey(num))
+                dict[num]++;
+            else
+                dict[num] = 1;
+        }
 
+        return dict.OrderByDescending(x => x.Value).First().Key;
+    }
+
+    private int CountRotations(int[] tops, int[] bottoms, int target)
+    {
+        int rotationsTops = 0, rotationsBottoms = 0;
+        int length = tops.Length;
+
+        for (int i = 0; i < length; i++)
+        {
+            if (tops[i] != target && bottoms[i] != target)
+                return int.MaxValue; 
+            else if (tops[i] != target)
+                rotationsTops++;
+            else if (bottoms[i] != target)
+                rotationsBottoms++; 
+        }
+
+
+        return Math.Min(rotationsTops, rotationsBottoms);
+    }
+}
 
 public class Program
 {
     public static void Main()
     {
         var sol = new Solution();
-        
-        Console.WriteLine($"result of LL.RR.LLRRLL.. is {sol.PushDominoes("LL.RR.LLRRLL..")}");
 
+        Console.WriteLine($"MinDominoRotations (tops = [2, 1, 2, 4, 2, 2], bottoms = [5, 2, 6, 2, 3, 2]): {sol.MinDominoRotations(new int[] { 2, 1, 2, 4, 2, 2 }, new int[] { 5, 2, 6, 2, 3, 2 })}"); //output -1
+        Console.WriteLine($"MinDominoRotations (tops = [1, 2, 1, 1, 1, 2, 2, 2], bottoms = [2, 1, 2, 2, 2, 2, 2, 2]): {sol.MinDominoRotations(new int[] { 1, 2, 1, 1, 1, 2, 2, 2 }, new int[] { 2, 1, 2, 2, 2, 2, 2, 2 })}"); //output 1
         Console.ReadLine();
     }
 }
-
-
-
-
