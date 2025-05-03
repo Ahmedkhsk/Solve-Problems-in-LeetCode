@@ -1,62 +1,64 @@
-﻿//Maximum Number Of Tasks You Can Assign
-//https://leetcode.com/problems/maximum-number-of-tasks-you-can-assign/description
+﻿//Push Dominoes
+//https://leetcode.com/problems/push-dominoes/description
 public class Solution
 {
-    public int MaxTaskAssign(int[] tasks, int[] workers, int pills, int strength)
+    public string PushDominoes(string dominoes)
     {
-        Array.Sort(tasks);
-        Array.Sort(workers);
+        int n = dominoes.Length;
+        int[] forces = new int[n];
+        int force = 0;
 
-        int left = 0, right = Math.Min(tasks.Length, workers.Length), result = 0;
-
-        while (left <= right)
+        for (int i = 0; i < n; i++)
         {
-            int mid = (left + right) / 2;
-            if (CanAssign(tasks, workers, pills, strength, mid))
+            if (dominoes[i] == 'R')
             {
-                result = mid;
-                left = mid + 1;
+                force = n;
+            }
+            else if (dominoes[i] == 'L')
+            {
+                force = 0;
             }
             else
             {
-                right = mid - 1;
+                force = Math.Max(force - 1, 0);
             }
+            forces[i] += force;
         }
 
-        return result;
-    }
-
-    private bool CanAssign(int[] tasks, int[] workers, int pills, int strength, int k)
-    {
-        var taskQueue = new Queue<int>(tasks.Take(k).OrderByDescending(t => t));
-        var workerList = new List<int>(workers.TakeLast(k)); 
-
-        int pillCount = pills;
-
-        while (taskQueue.Count > 0)
+        force = 0;
+        
+        for (int i = n-1 ; i >= 0; i--)
         {
-            int task = taskQueue.Dequeue();
-
-            if (workerList.Count == 0) return false;
-
-            if (workerList[workerList.Count - 1] >= task)
+            if (dominoes[i] == 'L')
             {
-                workerList.RemoveAt(workerList.Count - 1);
+                force = n;
+            }
+            else if (dominoes[i] == 'R')
+            {
+                force = 0;
             }
             else
             {
-                if (pillCount == 0) return false;
-
-                int index = workerList.FindIndex(w => w + strength >= task);
-                if (index == -1) return false;
-
-                workerList.RemoveAt(index);
-                pillCount--;
+                force = Math.Max(force - 1, 0);
             }
+            forces[i] -= force;
         }
 
-        return true;
+        char[] result = new char[n];
+
+        for (int i = 0; i < n ; i++)
+        {
+            if (forces[i] > 0)
+                result[i] = 'R';
+            else if(forces[i] < 0)
+                result[i] = 'L';
+            else
+                result[i] = '.';
+        }
+
+        return new string(result);
     }
+
 }
 
 
@@ -65,12 +67,8 @@ public class Program
     public static void Main()
     {
         var sol = new Solution();
-        int[] tasks = { 10, 15, 30 };
-        int[] workers = { 0, 10, 10, 10, 10 };
-        int pills = 3;
-        int strength = 10;
-
-        Console.WriteLine($"Count of Tasks => {sol.MaxTaskAssign(tasks, workers, pills, strength)}"); 
+        
+        Console.WriteLine($"result of LL.RR.LLRRLL.. is {sol.PushDominoes("LL.RR.LLRRLL..")}");
 
         Console.ReadLine();
     }
