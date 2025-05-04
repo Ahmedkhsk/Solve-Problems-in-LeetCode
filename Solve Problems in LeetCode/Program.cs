@@ -1,55 +1,38 @@
-﻿//Minimum Domino Rotations For Equal Row
-//https://leetcode.com/problems/minimum-domino-rotations-for-equal-row/description
+﻿//number-of-equivalent-domino-pairs
+//https://leetcode.com/problems/number-of-equivalent-domino-pairs/description
 using System;
 using System.Linq;
 using System.Collections.Generic;
 
 public class Solution
 {
-    public int MinDominoRotations(int[] tops, int[] bottoms)
+    public int NumEquivDominoPairs(int[][] dominoes)
     {
-        int length = tops.Length;
+        var dict = new Dictionary<(int, int),int>();
+        int result = 0;
 
-        int mostFrequentTops = GetMostFrequent(tops);
-        int mostFrequentBottoms = GetMostFrequent(bottoms);
-
-        int result = Math.Min(CountRotations(tops, bottoms, mostFrequentTops),
-                              CountRotations(tops, bottoms, mostFrequentBottoms));
-
-        return result == int.MaxValue ? -1 : result;
-    }
-
-    private int GetMostFrequent(int[] arr)
-    {
-        var dict = new Dictionary<int, int>();
-        foreach (var num in arr)
+        foreach (var domino in dominoes)
         {
-            if (dict.ContainsKey(num))
-                dict[num]++;
+            int min = Math.Min(domino[0], domino[1]);
+            int max = Math.Max(domino[0],domino[1]);
+
+            var key = (min, max);
+
+            if (dict.ContainsKey(key))
+            {
+                result += dict[key];
+                dict[key]++;
+            }
             else
-                dict[num] = 1;
+            {
+                dict[key] = 1;
+            }
+
         }
-
-        return dict.OrderByDescending(x => x.Value).First().Key;
-    }
-
-    private int CountRotations(int[] tops, int[] bottoms, int target)
-    {
-        int rotationsTops = 0, rotationsBottoms = 0;
-        int length = tops.Length;
-
-        for (int i = 0; i < length; i++)
-        {
-            if (tops[i] != target && bottoms[i] != target)
-                return int.MaxValue; 
-            else if (tops[i] != target)
-                rotationsTops++;
-            else if (bottoms[i] != target)
-                rotationsBottoms++; 
-        }
-
-
-        return Math.Min(rotationsTops, rotationsBottoms);
+        
+        
+            
+        return result;
     }
 }
 
@@ -59,8 +42,14 @@ public class Program
     {
         var sol = new Solution();
 
-        Console.WriteLine($"MinDominoRotations (tops = [2, 1, 2, 4, 2, 2], bottoms = [5, 2, 6, 2, 3, 2]): {sol.MinDominoRotations(new int[] { 2, 1, 2, 4, 2, 2 }, new int[] { 5, 2, 6, 2, 3, 2 })}"); //output -1
-        Console.WriteLine($"MinDominoRotations (tops = [1, 2, 1, 1, 1, 2, 2, 2], bottoms = [2, 1, 2, 2, 2, 2, 2, 2]): {sol.MinDominoRotations(new int[] { 1, 2, 1, 1, 1, 2, 2, 2 }, new int[] { 2, 1, 2, 2, 2, 2, 2, 2 })}"); //output 1
-        Console.ReadLine();
+        var result = sol.NumEquivDominoPairs(new int[][] {
+            new int[] {1,2},
+            new int[] {2,1},
+            new int[] {3,4},
+            new int[] {5,6}
+        });
+
+        Console.WriteLine(result); // Output: 1
+
     }
 }
