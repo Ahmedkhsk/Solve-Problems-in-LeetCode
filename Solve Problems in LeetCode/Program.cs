@@ -1,38 +1,23 @@
-﻿//Number of Equivalent Domino Pairs
-//https://leetcode.com/problems/number-of-equivalent-domino-pairs/description
+﻿//Build Array from Permutation
+//https://leetcode.com/problems/build-array-from-permutation/description
 using System;
 using System.Linq;
 using System.Collections.Generic;
 
 public class Solution
 {
-    public int NumEquivDominoPairs(int[][] dominoes)
+    public int[] BuildArray(int[] nums)
     {
-        var dict = new Dictionary<(int, int),int>();
-        int result = 0;
-
-        foreach (var domino in dominoes)
+        int n = nums.Length;
+        for (int i = 0; i < n; i++)
         {
-            int min = Math.Min(domino[0], domino[1]);
-            int max = Math.Max(domino[0],domino[1]);
-
-            var key = (min, max);
-
-            if (dict.ContainsKey(key))
-            {
-                result += dict[key];
-                dict[key]++;
-            }
-            else
-            {
-                dict[key] = 1;
-            }
-
+            nums[i] = nums[i] + n * (nums[nums[i]] % n);
         }
-        
-        
-            
-        return result;
+        for (int i = 0; i < n; i++)
+        {
+            nums[i] = nums[i] / n;
+        }
+        return nums;
     }
 }
 
@@ -42,14 +27,10 @@ public class Program
     {
         var sol = new Solution();
 
-        var result = sol.NumEquivDominoPairs(new int[][] {
-            new int[] {1,2},
-            new int[] {2,1},
-            new int[] {3,4},
-            new int[] {5,6}
-        });
+        int[] nums = { 0, 2, 1, 5, 3, 4 };
+        int[] result = sol.BuildArray(nums);
+        Console.WriteLine(string.Join(", ", result)); // Output: [0, 1, 2, 4, 5, 3]
 
-        Console.WriteLine(result); // Output: 1
 
     }
 }
