@@ -1,23 +1,37 @@
-﻿//Build Array from Permutation
-//https://leetcode.com/problems/build-array-from-permutation/description
-using System;
+﻿using System;
 using System.Linq;
 using System.Collections.Generic;
 
 public class Solution
 {
-    public int[] BuildArray(int[] nums)
+    public int RomanToInt(string s)
     {
-        int n = nums.Length;
-        for (int i = 0; i < n; i++)
+        var romanToIntMap = new Dictionary<char, int>
         {
-            nums[i] = nums[i] + n * (nums[nums[i]] % n);
-        }
-        for (int i = 0; i < n; i++)
+            {'I', 1},
+            {'V', 5},
+            {'X', 10},
+            {'L', 50},
+            {'C', 100},
+            {'D', 500},
+            {'M', 1000}
+        };
+
+        int total = 0;
+        
+        for(int i =0; i < s.Length; i++)
         {
-            nums[i] = nums[i] / n;
+            if (i < s.Length - 1 && romanToIntMap[s[i]] < romanToIntMap[s[i + 1]])
+            {
+                total -= romanToIntMap[s[i]];
+            }
+            else
+            {
+                total += romanToIntMap[s[i]];
+            }
+
         }
-        return nums;
+        return total;
     }
 }
 
@@ -27,10 +41,10 @@ public class Program
     {
         var sol = new Solution();
 
-        int[] nums = { 0, 2, 1, 5, 3, 4 };
-        int[] result = sol.BuildArray(nums);
-        Console.WriteLine(string.Join(", ", result)); // Output: [0, 1, 2, 4, 5, 3]
-
+        // Example usage
+        string romanNumeral = "III"; // Example Roman numeral
+        int result = sol.RomanToInt(romanNumeral);
+        Console.WriteLine($"The integer value of the Roman numeral {romanNumeral} is: {result}");
 
     }
 }
