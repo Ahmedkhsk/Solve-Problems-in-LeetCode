@@ -1,37 +1,48 @@
-﻿//Count Subarrays of Length Three With a Condition
-//https://leetcode.com/problems/count-subarrays-of-length-three-with-a-condition/description
+﻿//Count Largest Group
+//https://leetcode.com/problems/count-largest-group/description
 using System;
 using System.Linq;
 using System.Collections.Generic;
 
 public class Solution
 {
-    public int CountSubarrays(int[] nums)
+    public int CountLargestGroup(int n)
     {
-        int count = 0;
+        Dictionary<int, int> groupCounts = new Dictionary<int, int>();
 
-        for (int i = 0; i < nums.Length; i++)
+        for (int i = 1; i <= n; i++)
         {
+            int sum = 0;
+            int num = i;
 
-            if (i + 2 >= nums.Length)
-                break;
+            while (num > 0)
+            {
+                sum += num % 10;
+                num /= 10;
+            }
 
-            if (2 * (nums[i] + nums[i + 2]) == nums[i + 1])
-                count++;
-
+            if (groupCounts.ContainsKey(sum))
+                groupCounts[sum]++;
+            else
+                groupCounts[sum] = 1;
         }
+
+        int maxSize = groupCounts.Values.Max();
+
+        int count = groupCounts.Values.Count(v => v == maxSize);
+
         return count;
     }
-}
 
+}
 public class Program
 {
     public static void Main()
     {
         var sol = new Solution();
-        int[] arr = [1, 2, 1, 4, 1];
+        int num = 13;
 
-        Console.WriteLine(sol.CountSubarrays(arr));
+        Console.WriteLine(sol.CountLargestGroup(num));
 
 
     }
