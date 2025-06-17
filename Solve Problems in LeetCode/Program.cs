@@ -1,37 +1,26 @@
-﻿using System;
+﻿//Count Subarrays of Length Three With a Condition
+//https://leetcode.com/problems/count-subarrays-of-length-three-with-a-condition/description
+using System;
 using System.Linq;
 using System.Collections.Generic;
 
 public class Solution
 {
-    public int RomanToInt(string s)
+    public int CountSubarrays(int[] nums)
     {
-        var romanToIntMap = new Dictionary<char, int>
-        {
-            {'I', 1},
-            {'V', 5},
-            {'X', 10},
-            {'L', 50},
-            {'C', 100},
-            {'D', 500},
-            {'M', 1000}
-        };
+        int count = 0;
 
-        int total = 0;
-        
-        for(int i =0; i < s.Length; i++)
+        for (int i = 0; i < nums.Length; i++)
         {
-            if (i < s.Length - 1 && romanToIntMap[s[i]] < romanToIntMap[s[i + 1]])
-            {
-                total -= romanToIntMap[s[i]];
-            }
-            else
-            {
-                total += romanToIntMap[s[i]];
-            }
+
+            if (i + 2 >= nums.Length)
+                break;
+
+            if (2 * (nums[i] + nums[i + 2]) == nums[i + 1])
+                count++;
 
         }
-        return total;
+        return count;
     }
 }
 
@@ -40,11 +29,10 @@ public class Program
     public static void Main()
     {
         var sol = new Solution();
+        int[] arr = [1, 2, 1, 4, 1];
 
-        // Example usage
-        string romanNumeral = "III"; // Example Roman numeral
-        int result = sol.RomanToInt(romanNumeral);
-        Console.WriteLine($"The integer value of the Roman numeral {romanNumeral} is: {result}");
+        Console.WriteLine(sol.CountSubarrays(arr));
+
 
     }
 }
