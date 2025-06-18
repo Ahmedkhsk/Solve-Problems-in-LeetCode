@@ -1,37 +1,29 @@
-﻿//Contains Duplicate
-//https://neetcode.io/problems/duplicate-integer?list=neetcode150
+﻿//Valid Anagram
+//https://neetcode.io/problems/is-anagram?list=neetcode150
 using System;
 using System.Linq;
 using System.Collections.Generic;
+using System.Collections.Immutable;
+using System.Globalization;
 
 public class Solution
 {
-    public bool hasDuplicate(int[] nums)
+    public bool IsAnagram(string s, string t)
     {
-        Dictionary<int,int> keyValuePairs = new Dictionary<int, int>();
+        string sortedS = new string(s.OrderBy(c => c).ToArray());
+        string sortedT = new string(t.OrderBy(c => c).ToArray());
 
-        for(int i = 0; i < nums.Length ; i++)
-        {
-            if (keyValuePairs.ContainsKey(nums[i]))
-            {
-                return true;
-            }
-            else
-            {
-                keyValuePairs.Add(nums[i], i);
-            }
-        }
-
-        return false;
+        return sortedS.SequenceEqual(sortedT);
+        
     }
-
 }
 public class Program
 {
     public static void Main()
     {
         Solution solution = new Solution();
-        Console.WriteLine(solution.hasDuplicate(new int[] { 1, 2, 3, 3, 5 })); // true
+
+        Console.WriteLine(solution.IsAnagram("racecar", "carrace"));
 
     }
 }
