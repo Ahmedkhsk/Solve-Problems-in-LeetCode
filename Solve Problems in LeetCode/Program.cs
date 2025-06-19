@@ -1,30 +1,26 @@
-﻿//Divide Array Into Arrays With Max Difference
-//https://leetcode.com/problems/divide-array-into-arrays-with-max-difference/description/
+﻿//Two Sum
+//https://neetcode.io/problems/two-integer-sum?list=neetcode150
 
 
 public class Solution
 {
-    public int[][] DivideArray(int[] nums, int k)
+    public int[] TwoSum(int[] nums, int target)
     {
-        Array.Sort(nums);
-        int n = nums.Length;
-        List<int[]> result = new List<int[]>();
+        int[] arr = { };
 
-        for (int i = 0; i < n; i += 3)
+        for (int i = 0; i < nums.Length; i++)
         {
-            int a = nums[i];
-            int b = nums[i + 1];
-            int c = nums[i + 2];
-
-            if (c - a > k)
+            for (int j = i + 1; j < nums.Length; j++)
             {
-                return new int[0][];
+                if (nums[i] + nums[j] == target)
+                {
+                    arr = new int[2];
+                    arr[0] = i;
+                    arr[1] = j;
+                }
             }
-
-            result.Add(new int[] { a, b, c });
         }
-
-        return result.ToArray();
+        return arr;
     }
 }
 
@@ -34,19 +30,18 @@ public class Program
     {
         Solution solution = new Solution();
 
-        int[][] arr = solution.DivideArray(new int[] { 1, 2, 3, 4, 5, 6 }, 2);
-
-        if (arr.Length == 0)
+        int[] nums = { 2, 7, 11, 15 };
+        int target = 9;
+        int[] result = solution.TwoSum(nums, target);
+        if (result.Length > 0)
         {
-            Console.WriteLine("[]");
+            Console.WriteLine($"Indices of the two numbers that add up to {target} are: {result[0]} and {result[1]}");
         }
         else
         {
-            foreach (var subArray in arr)
-            {
-                Console.WriteLine($"[{string.Join(", ", subArray)}]");
-            }
+            Console.WriteLine("No two numbers add up to the target.");
         }
+
 
     }
 }
