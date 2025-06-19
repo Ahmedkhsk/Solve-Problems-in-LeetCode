@@ -1,34 +1,37 @@
-﻿//Group Anagrams
-//https://neetcode.io/problems/anagram-groups?list=neetcode150
+﻿//Partition Array Such That Maximum Difference Is K
+//https://leetcode.com/problems/partition-array-such-that-maximum-difference-is-k/description
 
 
 public class Solution
 {
-    public List<List<string>> GroupAnagrams(string[] strs)
+    public int PartitionArray(int[] nums, int k)
     {
-        Dictionary<string,List<string>> map = new Dictionary<string,List<string>>();
+        Array.Sort(nums);
+        int count = 1; 
+        int start = 0;
 
-        foreach (string str in strs)
+        for (int i = 0; i < nums.Length; i++)
         {
-            string sorted = new string (str.OrderBy(c => c).ToArray());
-
-            if(!map.ContainsKey(sorted))
+            if (nums[i] - nums[start] > k) 
             {
-                map[sorted] = new List<string>();
+                count++;
+                start = i;
             }
-            map[sorted].Add(str);
         }
-        return map.Values.ToList();
+
+        return count;
     }
 }
+
 
 public class Program
 {
     public static void Main()
     {
         Solution solution = new Solution();
-
-
+        Console.WriteLine(solution.PartitionArray(new int[] { 3, 6, 1, 2, 5 }, 2));
+        Console.WriteLine(solution.PartitionArray(new int[] { 1, 2, 3 }, 1));
+        Console.WriteLine(solution.PartitionArray(new int[] { 2, 2, 4, 5 }, 0));
 
     }
 }
