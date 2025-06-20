@@ -1,25 +1,34 @@
-﻿//Partition Array Such That Maximum Difference Is K
-//https://leetcode.com/problems/partition-array-such-that-maximum-difference-is-k/description
+﻿//Maximum manhattan distance after K changes
+//https://leetcode.com/problems/maximum-manhattan-distance-after-k-changes/description
 
 
 public class Solution
 {
-    public int PartitionArray(int[] nums, int k)
+    public int MaxDistance(string s, int k)
     {
-        Array.Sort(nums);
-        int count = 1; 
-        int start = 0;
+        int maxD = 0 , prevD = 0 , currentD = 0 , x = 0, y = 0 , step;
+        List<int> steps = new List<int>();
 
-        for (int i = 0; i < nums.Length; i++)
+        foreach (char c in s)
         {
-            if (nums[i] - nums[start] > k) 
-            {
-                count++;
-                start = i;
-            }
-        }
+            prevD = Math.Abs(x) + Math.Abs(y);
 
-        return count;
+            if (c == 'N') y++;
+            else if (c == 'S') y--;
+            else if (c == 'E') x++;
+            else if (c == 'W') x--;
+
+            currentD = Math.Abs(x) + Math.Abs(y);
+            maxD = Math.Max(maxD, currentD);
+        }
+        
+        step = currentD - prevD;
+        if(step > 0)
+            steps.Add(step);
+        else
+            steps.Add(-step);
+        
+
     }
 }
 
@@ -29,9 +38,6 @@ public class Program
     public static void Main()
     {
         Solution solution = new Solution();
-        Console.WriteLine(solution.PartitionArray(new int[] { 3, 6, 1, 2, 5 }, 2));
-        Console.WriteLine(solution.PartitionArray(new int[] { 1, 2, 3 }, 1));
-        Console.WriteLine(solution.PartitionArray(new int[] { 2, 2, 4, 5 }, 0));
 
     }
 }
