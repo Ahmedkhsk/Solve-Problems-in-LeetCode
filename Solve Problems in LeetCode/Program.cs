@@ -1,43 +1,46 @@
-﻿//Maximum manhattan distance after K changes
-//https://leetcode.com/problems/maximum-manhattan-distance-after-k-changes/description
-
-
-public class Solution
+﻿public class Solution
 {
-    public int MaxDistance(string s, int k)
+    public string LongestPalindrome(string s)
     {
-        int maxD = 0 , prevD = 0 , currentD = 0 , x = 0, y = 0 , step;
-        List<int> steps = new List<int>();
+        if (string.IsNullOrEmpty(s)) return "";
 
-        foreach (char c in s)
+        int start = 0, maxLength = 1;
+        void ExpandAroundCenter(int left, int right)
         {
-            prevD = Math.Abs(x) + Math.Abs(y);
-
-            if (c == 'N') y++;
-            else if (c == 'S') y--;
-            else if (c == 'E') x++;
-            else if (c == 'W') x--;
-
-            currentD = Math.Abs(x) + Math.Abs(y);
-            maxD = Math.Max(maxD, currentD);
+            while (left >= 0 && right < s.Length && s[left] == s[right])
+            {
+                int length = right - left + 1;
+                if (length > maxLength)
+                {
+                    start = left;
+                    maxLength = length;
+                }
+                left--;
+                right++;
+            }
         }
-        
-        step = currentD - prevD;
-        if(step > 0)
-            steps.Add(step);
-        else
-            steps.Add(-step);
-        
-
+        for (int i = 0; i < s.Length; i++)
+        {
+            ExpandAroundCenter(i, i); 
+            ExpandAroundCenter(i, i + 1); 
+        }
+        return s.Substring(start, maxLength);
     }
+
 }
+
+
+
 
 
 public class Program
 {
     public static void Main()
     {
-        Solution solution = new Solution();
-
+        Solution sol = new Solution();
+ 
+        string input = "aaaaasd323babad";
+        string result = sol.LongestPalindrome(input);
+        Console.WriteLine($"Longest palindromic substring of '{input}' is: '{result}'");
     }
 }
